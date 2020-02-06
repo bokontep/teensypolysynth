@@ -22,25 +22,38 @@
 
 class  ADSR {
 public:
-	ADSR(void);
+  ADSR();
+	ADSR(float sampleRate);
 	~ADSR(void);
 
 	float Process(void);
-    float GetOutput(void);
-    int GetState(void);
-	void SetADSR(float attack, float decay, float sustain, float release);
+  float GetOutput(void);
+  int GetState(void);
+	void SetADSR(byte attack, byte decay, byte sustain, byte release);
 	void Gate(int on);
-    void SetAttack(float attack);
-    void SetDecay(float decay);
-    void SetRelease(float release);
+  void SetAttack(float attack);
+  void SetDecay(float decay);
+  void SetRelease(float release);
 	void SetSustain(float level);
-    float GetAttack(){return attack;}
-    float GetDecay(){return decay;}
-    float GetSustain(){return sustainLevel;}
-    float GetRelease(){return release;}
-    void Reset(void);
+  float GetAttack(){return attack;}
+  float GetDecay(){return decay;}
+  float GetSustain(){return sustainLevel;}
+  float GetRelease(){return release;}
+  void Reset(void);
+  void SetAttackMidi(byte attack);
+  void SetDecayMidi(byte decay);
+  void SetSustainMidi(byte sustain);
+  void SetReleaseMidi(byte release);
+  byte GetAttackMidi(){return midiAttack;}
+  byte GetDecayMidi(){return midiDecay;}
+  byte GetSustainMidi(){return midiSustain;}
+  byte GetReleaseMidi(){return midiRelease;}
+  double GetAttackCoef(){return attackCoef;}
+  double GetDecayCoef(){return decayCoef;}
+  double GetReleaseCoef(){return releaseCoef;}
+  double GetReleaseBase(){return releaseBase;}
 
-    enum envState {
+  enum envState {
         env_idle = 0,
         env_attack,
         env_decay,
@@ -50,22 +63,24 @@ public:
 
 protected:
 
-    int state;
-    float output;
+  int state;
+  float output;
 	float attack;
 	float decay;
 	float release;
 	int32_t counter;
-	float attackCoef;
-	float decayCoef;
-	float releaseCoef;
-	float sustainLevel;
-    
-    float attackBase;
-    float decayBase;
-    float releaseBase;
- 
-    
+	double attackCoef;
+	double decayCoef;
+	double releaseCoef;
+	double sustainLevel;
+  double attackBase;
+  double decayBase;
+  double releaseBase;
+  byte midiAttack;
+  byte midiDecay;
+  byte midiSustain;
+  byte midiRelease;
+  float sampleRate;
 };
 
 inline float ADSR::Process() {
@@ -85,13 +100,13 @@ inline float ADSR::Process() {
         case env_decay:
             output = output - decayCoef;
 			
-            if (output <= sustainLevel) {
+            if (output <= sustainLevel || output <=0) {
                 output = sustainLevel;
                 state = env_sustain;
             }
-            break;SetWaveTable
+            break;
         case env_sustain:
-			//output = sustainLevel;
+			    output = sustainLevel;
             break;
         case env_release:
             output = output - releaseCoef;

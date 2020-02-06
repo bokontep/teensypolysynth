@@ -24,8 +24,16 @@
 
 
 
-ADSR::ADSR(void) {
-    Reset();
+ADSR::ADSR() {
+  Reset();
+  this->sampleRate = 44100;
+  SetADSR(1.0, 1.0, 1.0, 1.0);
+    
+}
+
+ADSR::ADSR(float sampleRate) {
+  Reset();
+	this->sampleRate = sampleRate;
 	SetADSR(1.0, 1.0, 1.0, 1.0);
     
 }
@@ -33,15 +41,16 @@ ADSR::ADSR(void) {
 ADSR::~ADSR(void) {
 }
 
-void ADSR::SetADSR(float attack, float decay, float sustain, float release)
+void ADSR::SetADSR(byte attack, byte decay, byte sustain, byte release)
 {
-	SetSustain(sustain);
-	SetAttack(attack);
-	SetDecay(decay);
-	SetRelease(release);
+	SetSustainMidi(sustain);
+	SetAttackMidi(attack);
+	SetDecayMidi(decay);
+	SetReleaseMidi(release);
 }
 void ADSR::SetAttack(float attack) {
-    this->attack = attack;
+
+  this->attack = attack;
 	if (attack < 0.001)
 	{
 		attack = 0.001;
@@ -49,6 +58,7 @@ void ADSR::SetAttack(float attack) {
   
     attackCoef = 1.0/attack;
     attackBase = 0.0;
+    
 }
 
 
@@ -78,4 +88,61 @@ void ADSR::SetRelease(float releaseval)
 	}
 	releaseCoef = (this->sustainLevel / this->release);
 	releaseBase = this->sustainLevel;
+}
+
+void ADSR::SetAttackMidi(byte attack)
+{
+  this->midiAttack=attack;
+  this->attack = ((float)midiAttack)/127.0;
+  double maxlength = 1.0*sampleRate;
+  if(midiAttack==0)
+  {
+    attackCoef = 1.0;
+  }
+  else
+  {
+    attackCoef = 127.0 /(maxlength*(double)midiAttack);
+  }
+  attackBase = 0.0;
+  
+}
+void ADSR::SetDecayMidi(byte decay)
+{
+  this->midiDecay=decay;
+  this->decay = ((float)this->midiDecay)/127.0;
+  double maxlength = 1.0*sampleRate;
+  if(midiDecay==0)
+  {
+    decayCoef=1.0 - this->sustainLevel;  
+  }
+  else
+  {
+    decayCoef = ((1.0 - this->sustainLevel)*127.0) / (maxlength*(float)midiDecay);
+  }
+  
+}
+
+void ADSR::SetSustainMidi(byte sustain)
+{
+  this->midiSustain=sustain;
+  this->sustainLevel = ((float)midiSustain)/127.0;
+  decayBase = sustainLevel;
+}
+
+void ADSR::SetReleaseMidi(byte release)
+{
+  this->midiRelease=release;
+  this->release = ((float)this->midiRelease)/127.0;
+  double maxlength = sampleRate*5.0;
+  
+  if(midiRelease==0)
+  {
+    releaseCoef=this->sustainLevel;
+  }
+  else
+  {
+    releaseCoef = (this->sustainLevel*127.0) / (maxlength*((double)midiRelease));
+    //releaseCoef = ((this->sustainLevel * 127.0)/maxlength)/(float)midiRelease; 
+  }
+  releaseBase = this->sustainLevel;
 }

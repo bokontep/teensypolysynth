@@ -15,7 +15,7 @@ template <int numvoices,int WAVEFORM_COUNT, int WTLEN> class VAEngine:public Aud
     {
       
     }
-    void init(double sampleRate)
+    void init(float sampleRate)
     {
       for(int i=0;i<numvoices;i++)
       {

@@ -6,7 +6,7 @@
 const int WTCOUNT=256;
 const int WTLEN=256;
 float Waveforms[WTCOUNT*WTLEN];
-VAEngine<8,256,256> vaEngine(&Waveforms[0]);
+VAEngine<4,256,256> vaEngine(&Waveforms[0]);
 AudioOutputI2S i2s1;
 AudioMixer4 mixer;
 AudioConnection patchCord1(vaEngine, 0, mixer, 0);
@@ -69,6 +69,7 @@ void OnPitchChange(byte channel,int pitch)
 {
   vaEngine.handlePitchBend(channel,pitch+8192);
 }
+long lastrun=0;
 void setup()
 {
   initWaveForms();
@@ -86,10 +87,29 @@ void setup()
   usbMIDI.setHandleNoteOff(OnNoteOff);
   usbMIDI.setHandleControlChange(OnControlChange);
   usbMIDI.setHandlePitchChange(OnPitchChange);
-  
-  
+  lastrun = millis();
+  ADSR adsr(44100.0);
+  for(int i=0;i<128;i++)
+  {
+    adsr.SetDecayMidi(i);
+    Serial.print(i);
+    Serial.print(":");
+     
+    Serial.print(adsr.GetDecayCoef());
+    Serial.println();
+  }
+  Serial.println(1.43343434);
 }
+
 void loop()
 {
+  
   usbMIDI.read();
+  long now=millis();
+  if(now-lastrun>2000)
+  {
+    
+    lastrun = now;
+  }
+  
 }

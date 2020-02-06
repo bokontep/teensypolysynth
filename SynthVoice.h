@@ -22,7 +22,7 @@ public:
         lowpass.SetParameters(ffreq, fq);
         
     }
-    SynthVoice(double sampleRate) {
+    SynthVoice(float sampleRate) {
         this->sampleRate = sampleRate;
         this->modulation = 0;
         this->pwm = 0.5;
@@ -36,7 +36,7 @@ public:
     ~SynthVoice(void) {
         
     }
-    void SetSampleRate(double newSampleRate)
+    void SetSampleRate(float newSampleRate)
     {
       this->sampleRate = newSampleRate;
     }
@@ -44,7 +44,7 @@ public:
     void MidiNoteOn(uint8_t note, uint8_t vel)
     {
         
-        double f = pow(2.0,(note*1.0-69.0)/12.0)*440.0;
+        float f = pow(2.0,(note*1.0-69.0)/12.0)*440.0;
         velocity = vel/128.0; 
         freq1 = f;
         freq2 = f;
@@ -75,11 +75,11 @@ public:
         osc[1].AddSharedWaveTable(len, waveTableIn);
     }
     
-    void SetOsc1ADSR(float a, float d,float s,float r)
+    void SetOsc1ADSR(byte a, float d,float s,float r)
     {
         adsr[0].SetADSR(a,d,s,r);
     }
-    void SetOsc2ADSR(float a, float d, float s, float r)
+    void SetOsc2ADSR(byte a, float d, float s, float r)
     {
         adsr[1].SetADSR(a,d,s,r);
     }
@@ -122,29 +122,29 @@ public:
             MidiOsc2Wave(value);
           break;
           case 18: //osc1 attack
-            SetOsc1ADSR(value*(1.0/127.0),adsr[0].GetDecay(),adsr[0].GetSustain(),adsr[0].GetRelease());
+            adsr[0].SetAttackMidi(value);
           break;
           case 19: //osc1 decay
-            SetOsc1ADSR(adsr[0].GetAttack(),value*(1.0/127.0),adsr[0].GetSustain(),adsr[0].GetRelease());
+            adsr[0].SetDecayMidi(value);
           break;
-          case 20: //osc1 systain
-            SetOsc1ADSR(adsr[0].GetAttack(),adsr[0].GetDecay(),value*(1.0/127.0),adsr[0].GetRelease());
+          case 20: //osc1 sustain
+            adsr[0].SetSustainMidi(value);
           break;
           case 21: //osc1 release
-            SetOsc1ADSR(adsr[0].GetAttack(),adsr[0].GetDecay(),adsr[0].GetSustain(),value*(1.0/127.0));
+            adsr[0].SetReleaseMidi(value);
           break;
 
           case 22: //osc2 attack
-            SetOsc2ADSR(value*(1.0/127.0),adsr[1].GetDecay(),adsr[1].GetSustain(),adsr[1].GetRelease());
+            adsr[1].SetAttackMidi(value);
           break;
           case 23: //osc2 decay
-            SetOsc2ADSR(adsr[1].GetAttack(),value*(1.0/127.0),adsr[1].GetSustain(),adsr[1].GetRelease());
+            adsr[1].SetDecayMidi(value);
           break;
-          case 24: //osc2 systain
-            SetOsc2ADSR(adsr[1].GetAttack(),adsr[1].GetDecay(),value*(1.0/127.0),adsr[1].GetRelease());
+          case 24: //osc2 sustain
+            adsr[1].SetSustainMidi(value);
           break;
           case 25: //osc2 release
-            SetOsc2ADSR(adsr[1].GetAttack(),adsr[1].GetDecay(),adsr[1].GetSustain(),value*(1.0/127.0));
+            adsr[1].SetReleaseMidi(value);
           break;
           case 26: //filter freq
             lowpass.SetParameters(value*(1.0/127.0),lowpass.GetRes());
@@ -233,9 +233,9 @@ public:
 protected:
     FloatWaveTableOsc osc[2];
     ADSR adsr[2];
-    double sampleRate;
-    double freq1;
-    double freq2;
+    float sampleRate;
+    float freq1;
+    float freq2;
     float velocity;
     float modulation;
     float pwm;
