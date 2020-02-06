@@ -3,7 +3,7 @@
 #include <Audio.h>
 
 #include "VAEngine.h"
-const int WTCOUNT=256;
+const int WTCOUNT=128;
 const int WTLEN=256;
 float Waveforms[WTCOUNT*WTLEN];
 VAEngine<16,256,256> vaEngine(&Waveforms[0]);
@@ -40,14 +40,14 @@ void initWaveForms()
     Waveforms[4*WTLEN+i] = -1.0+random(1UL<<31)* (2.0/(1UL<<31));
   }
   
-  for (int w=5;w<WTLEN;w++)
+  for (int w=5;w<WTCOUNT;w++)
   {
     for(int i=0;i<256;i++)
     {
-      float f1 = (255.0-w)/250.0;
-      float f2 = ((255-w)%125)/125.0;
-      float f3 = ((255-w)%62)/62.0;
-      float f4 = ((255-w)%31)/31.0; 
+      float f1 = (WTCOUNT-w)/120;
+      float f2 = ((WTCOUNT-w)%120)/110.0;
+      float f3 = ((WTCOUNT-w)%62)/60.0;
+      float f4 = ((WTCOUNT-w)%31)/31.0; 
       Waveforms[w*WTLEN+i] = ((f1*Waveforms[i]+f2*Waveforms[WTLEN+i]+f3*Waveforms[2*WTLEN+i]+f4*Waveforms[3*WTLEN+i])/4);   
     }
   }
