@@ -26,7 +26,7 @@ For example there are currently no lfos and there is just one lowpass filter per
 
 To built the code you just need to have the Teensyduino extension (I used version 1.50)
 
-# Currently the following midi CCs are supported:
+Currently the following midi CCs are supported:
 
 | # | MIDI CC | Parameter |
 | --- | --- | --- |
