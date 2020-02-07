@@ -26,24 +26,23 @@ For example there are currently no lfos and there is just one lowpass filter per
 
 To built the code you just need to have the Teensyduino extension (I used version 1.50)
 
-Currently the following midi CCs are supported:
+##Currently the following midi CCs are supported:
 
-
-| MIDI CC | Parameter |
+| # | MIDI CC | Parameter |
 | ----------- |
-| 1 | Modulation |
-| 16 | Osc1 Wave |
-| 17 | Osc2 Wave |
-| 18 | Osc1 ADSR Attack |
-| 19 | Osc1 ADSR Decay |
-| 20 | Osc1 ADSR Sustain |
-| 21 | Osc1 ADSR Release |
-| 22 | Osc2 ADSR Attack |
-| 23 | Osc2 ADSR Decay |
-| 24 | Osc2 ADSR Sustain |
-| 25 | Osc2 ADSR Release |
-| 26 | Osc1 ADSR Filter Frequency |
-| 27 | Osc1 ADSR Filter Resonance |
-| 28 | Osc1 ADSR PWM |
+| 1 | 1 | Modulation |
+| 2 | 16 | Osc1 Wave |
+| 3 | 17 | Osc2 Wave |
+| 4 | 18 | Osc1 ADSR Attack |
+| 5 | 19 | Osc1 ADSR Decay |
+| 6 | 20 | Osc1 ADSR Sustain |
+| 7 | 21 | Osc1 ADSR Release |
+| 8 | 22 | Osc2 ADSR Attack |
+| 9 | 23 | Osc2 ADSR Decay |
+| 10 | 24 | Osc2 ADSR Sustain |
+| 11 | 25 | Osc2 ADSR Release |
+| 12 | 26 | Osc1 ADSR Filter Frequency |
+| 13 | 27 | Osc1 ADSR Filter Resonance |
+| 14 | 28 | Osc1 ADSR PWM |
 
 Enjoy!
