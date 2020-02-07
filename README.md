@@ -28,7 +28,8 @@ To built the code you just need to have the Teensyduino extension (I used versio
 
 Currently the following midi CCs are supported:
 
-| midi CC | Parameter |
+
+| MIDI CC | Parameter |
 | ----------- |
 | 1 | Modulation |
 | 16 | Osc1 Wave |
