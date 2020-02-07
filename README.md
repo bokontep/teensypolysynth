@@ -29,6 +29,7 @@ To built the code you just need to have the Teensyduino extension (I used versio
 Currently the following midi CCs are supported:
 
 | midi CC | Parameter |
+| ----------- |
 | 1 | Modulation |
 | 16 | Osc1 Wave |
 | 17 | Osc2 Wave |
@@ -44,4 +45,4 @@ Currently the following midi CCs are supported:
 | 27 | Osc1 ADSR Filter Resonance |
 | 28 | Osc1 ADSR PWM |
 
-
+Enjoy!
