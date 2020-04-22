@@ -1,5 +1,6 @@
 
 
+
 #include <Audio.h>
 
 #include "VAEngine.h"
@@ -7,6 +8,7 @@ const int WTCOUNT=128;
 const int WTLEN=256;
 float Waveforms[WTCOUNT*WTLEN];
 VAEngine<16,256,256> vaEngine(&Waveforms[0]);
+
 AudioOutputI2S i2s1;
 AudioMixer4 mixer;
 AudioConnection patchCord1(vaEngine, 0, mixer, 0);
@@ -74,6 +76,7 @@ void setup()
 {
   initWaveForms();
   Serial.begin(115200);
+  Serial4.begin(115200);
   delay(4000);
   
   vaEngine.init(44100.0);
@@ -105,11 +108,49 @@ void loop()
 {
   
   usbMIDI.read();
+  serialReadHandler();
   long now=millis();
   if(now-lastrun>2000)
   {
     
     lastrun = now;
+  }
+  
+}
+void serialReadHandler()
+{
+  if(Serial4.available()>0)
+  {
+    Serial.println("data!");
+  }
+  while(Serial4.available()>=3)
+  {
+    
+    byte b0 = Serial4.read();
+    byte b1 = Serial4.read();
+    byte b2 = Serial4.read();
+    byte channel = b0&0b1111;
+    byte message = b0&0b11110000;
+    Serial.print("CH:");
+    Serial.print(channel);
+    Serial.print(" MSG");
+    Serial.print(message,HEX);
+    Serial.print(" B1:");
+    Serial.print(b1,HEX);
+    Serial.print(" B2:");
+    Serial.println(b2,HEX);
+    if((b0&0b11110000)==0xB0)
+    {
+      OnControlChange(channel,b1,b2);
+    }
+    if((b0&0b11110000)==0x80)
+    {
+      OnNoteOff(channel,b1,b2);
+    }
+    if((b0&0b11110000)==0x90)
+    {
+      OnNoteOn(channel,b1,b2);
+    }
   }
   
 }
